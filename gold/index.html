@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d2a3f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gold Buying">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>Gold Buying Objections · Dorset Jewellers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ee; --card:#ffffff; --ink:#1f2430; --muted:#6b6f7a; --line:#e6e0d4;
+    --gold:#a8843c; --gold-soft:#f3ead6; --navy:#1d2a3f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+  header{background:var(--navy);color:#fff;padding:18px 16px 14px}
+  header h1{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:26px;margin:0;letter-spacing:.3px}
+  header p{margin:2px 0 0;color:#c9cfdb;font-size:13px}
+  .searchwrap{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
+  .search{display:flex;align-items:center;background:#fff;border:1.5px solid var(--gold);border-radius:14px;padding:0 8px 0 14px}
+  .search svg{flex:none;opacity:.6}
+  .search input{flex:1;border:0;outline:0;font-size:18px;padding:13px 10px;background:transparent;font-family:inherit;color:var(--ink);min-width:0}
+  .clear{border:0;background:var(--gold-soft);color:var(--navy);border-radius:10px;padding:7px 11px;font-size:14px;font-family:inherit;cursor:pointer;display:none}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink);cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  main{padding:10px 16px 60px;max-width:760px;margin:0 auto}
+  .count{color:var(--muted);font-size:13px;margin:4px 2px 10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:10px}
+  .cat{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .obj{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600;line-height:1.2;margin:3px 0 8px;color:var(--navy)}
+  .say{background:var(--gold-soft);border-left:3px solid var(--gold);border-radius:8px;padding:9px 11px;margin:0 0 8px}
+  .lbl{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
+  .note{font-size:14px;color:#3d4250}
+  mark{background:#f6dc8f;color:inherit;border-radius:3px;padding:0 1px}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px}
+  .rules{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;margin-top:18px;font-size:14px}
+  .rules h2{font-family:"Cormorant Garamond",serif;font-size:20px;margin:0 0 6px;color:var(--navy)}
+  .rules p{margin:4px 0}
+  .method{font-size:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 15px;margin-bottom:12px}
+  .method b{color:var(--navy)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Gold Buying Objections</h1>
+  <p>Dorset Jewellers · type what the seller said</p>
+</header>
+<div class="searchwrap">
+  <div class="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d2a3f" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="e.g. not enough, spot price, my mum's" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search">
+    <button class="clear" id="clear">Clear</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+<main>
+  <div class="method" id="method"><b>Every time:</b> weigh and test in front of them, explain the offer piece by piece, answer the real worry, and never rush.</div>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  <div class="rules">
+    <h2>Never do</h2>
+    <p>Never pressure anyone to sell, or invent a "today only" price. Never predict the gold price. Weigh and test in view, every time. Only buy from the owner, and follow Adam's ID and payment process. If someone seems confused or vulnerable, stop and suggest a family member is there. Home visits are for buying only, never repairs. Stay calm and premium, never pawn-shop. If unsure: "Let me check with Adam."</p>
+  </div>
+<p style="text-align:center;margin-top:16px;font-size:14px"><a href="../" style="color:#a8843c">Selling jewellery? Open the Objection Finder</a></p>
+</main>
+<script>
+const D = [
+// Price
+["The offer","That's not enough.","I understand. Let me show you exactly how we got there, the weight, the carat, and what we pay per gram.","Break it down in front of them: weight x purity x our rate. Transparency usually settles it.","not enough low too low insulting offer price more money"],
+["The offer","Can you go any higher?","Let me check the weights again with you. If I can do any better, I'll tell you straight.","Know your limit before you go in. Any increase must be agreed with Adam. Never invent a 'special price today'.","higher more better offer increase haggle negotiate"],
+["The offer","I've seen a higher gold price online.","That'll be the market price for pure gold. Your jewellery is part gold, part other metals, and we pay a share of the pure value.","Spot price is for pure 24ct gold, usually quoted per troy ounce (31.1g). 9ct is only 37.5% gold.","online spot price internet google news higher"],
+["The offer","Why are you paying less than the gold price?","We pay most of it. The rest covers testing, refining and running the business, like any buyer.","Be honest about the margin. Never pretend we pay full market price.","less than gold price margin cut profit why"],
+["The offer","Another buyer offered me more.","That's fair to check. Did they weigh it in front of you and tell you the carat of each piece?","Higher quotes often drop after testing. Never criticise the other buyer.","another buyer offered more competitor elsewhere better offer"],
+["The offer","The post-it-off websites pay more.","Some quote high, then lower it once your gold is already in their hands. With us you see it weighed and get paid on the spot.","Selling by post means losing sight of your gold. That's our biggest advantage.","post website online cash for gold envelope send off"],
+["The offer","My jeweller said it's worth more.","They may have been talking about retail or insurance value. That's what it would cost to buy new, not what it sells for.","Insurance valuations are replacement value, always far higher than scrap.","jeweller valuation worth more insurance valued"],
+["The offer","I paid a lot more than that for it.","I know, and it's hard to hear. When it's new you pay for design and making. When you sell, it's valued on the gold content.","Adam's rule: what was originally paid has nothing to do with today's value.","paid more bought cost original price receipt"],
+["The offer","My scales at home said it weighed more.","Kitchen scales aren't made for small weights. Ours are calibrated trade scales. Let's weigh it together now.","Weigh in grams, in front of them, one carat group at a time.","scales weigh weight home kitchen heavier"],
+["The offer","What about the stones? You're not paying for them.","Most small stones don't add value as scrap. If any look worth more, Adam can take a proper look.","Small diamonds and coloured stones rarely add scrap value. Offer to return stones if they want them, if Adam agrees.","stones diamonds gems not paying"],
+["The offer","It's a designer or antique piece, it's worth more than scrap.","You could be right. If it's worth more as it is, we'll say so and Adam will value it properly.","Signed, antique and well-made pieces can be worth more than melt. Honesty here builds trust.","designer antique vintage brand signed victorian worth more"],
+// Trust
+["Trust","I don't trust gold buyers.","I don't blame you, some give the trade a bad name. That's why we do everything in front of you.","Adam's 28 years, NAJ membership and full insurance. Real Google reviews only.","trust gold buyers rip off scam cowboys"],
+["Trust","How do I know you're testing it properly?","I'll test each piece in front of you and show you the hallmark where there is one.","Hallmark numbers: 375 = 9ct, 585 = 14ct, 750 = 18ct, 916 = 22ct, 999 = 24ct.","test testing acid check properly"],
+["Trust","How do I know you're a proper business?","We're Dorset Jewellers at 97a Poole High Street. Adam's been in the trade 28 years and we're fully insured.","Carry a business card. Invite them to pop into the shop first if they'd prefer.","proper business legit genuine who are you"],
+["Trust","I don't want strangers in my house.","Completely understand. You're welcome to bring it to the shop instead, or have someone with you.","Never push to come in. Home visits are for buying only.","house home strangers visit uncomfortable"],
+["Trust","Can I see you weigh it?","Of course, I'd rather you did.","Always weigh in view. Let them read the display.","see weigh watch scales show me"],
+["Trust","You're saying it isn't real gold.","I'm sorry, I know that's disappointing. Let me show you the test so you can see it yourself.","Gold plated, rolled gold and gold filled pieces have very little or no gold value.","not gold fake plated rolled gold filled real"],
+["Trust","It's not hallmarked, so how do you know?","We test it. A missing hallmark doesn't mean it's not gold, especially on older or foreign pieces.","Older and overseas jewellery often has no UK hallmark.","hallmark no hallmark unmarked stamp"],
+// Emotional
+["Sentimental and family","It belonged to my mum, it's sentimental.","Take all the time you need. Some people keep one special piece and sell the rest.","Never pressure anyone to sell a memory. Offer to separate what they want to keep.","sentimental mum dad nan grandma inherited passed away memory"],
+["Sentimental and family","I need to ask my family first.","Of course. I'll write the offer down so you can show them.","Leave a written offer with weights. Check with Adam how long an offer stands.","family ask kids children son daughter check first"],
+["Sentimental and family","My husband or wife isn't here.","No problem, we can come back when you're both in.","If they seem unsure about ownership, stop. Only buy from the owner.","husband wife partner not here both"],
+["Sentimental and family","I feel bad selling it.","That's natural. Lots of people feel better knowing it's going to good use rather than sitting in a drawer.","Be kind. Never guilt anyone either way.","feel bad guilty selling wrong"],
+["Sentimental and family","My grandchildren might want it one day.","Lovely thought. Maybe keep a piece for each of them and sell the odd and broken bits.","Splitting the lot keeps trust and still makes a purchase.","grandchildren kids might want keep one day"],
+// Timing
+["Timing","I need to think about it.","Of course. Is it the price, or just not feeling ready?","Whatever they name is the real objection. Never rush.","think about it unsure not sure maybe decide"],
+["Timing","The gold price might go up. I'll wait.","It might, or it might drop. Nobody knows. If you need the money now, today's price is solid.","Never predict the gold price or promise it will fall.","wait price go up rise later market"],
+["Timing","Not today.","No problem at all. Here's my card, ring whenever you're ready.","Leave details. A calm visit often brings a call back.","not today another time later busy"],
+// Practical
+["Payment and practical","How do I get paid?","Explain how we pay, clearly and before anything is agreed.","Follow Adam's process on payment methods and records.","paid payment how cash transfer bank"],
+["Payment and practical","I only want cash.","Explain what payment methods we use and why.","Check Adam's current rules on cash and records before every visit.","cash only notes money now"],
+["Payment and practical","Why do you need my ID?","It's standard for anyone buying gold. It protects you and us, and proves the items are yours to sell.","Always follow Adam's ID and record-keeping process.","id identification passport licence driving why need"],
+["Payment and practical","It's broken, is it even worth anything?","Yes. Broken gold is still gold. It's the weight and carat that count.","Snapped chains, single earrings, dented rings and dental gold can all be bought.","broken snapped odd earring bent damaged worth"],
+["Payment and practical","Why is 9ct worth so much less than 18ct?","9ct is 37.5% gold, 18ct is 75%. So 18ct has twice the gold in it.","Separate pieces by carat before weighing. It makes the offer easy to explain.","9ct 18ct 22ct carat difference less"],
+["Payment and practical","Do you buy silver too?","Ask Adam what we're currently buying before you go out.","Sterling silver is 92.5% pure, hallmarked 925. Silver is worth far less per gram than gold.","silver sterling cutlery coins"],
+["Payment and practical","I've got gold coins.","Let's take a look. Some coins are worth more than their gold.","Sovereigns and krugerrands can carry value beyond weight. Check with Adam.","coins sovereign krugerrand bullion bar"]
+].map(([c,o,s,n,k],i)=>({i,c,o,s,n,k}));
+
+// words that mean the same thing to a customer
+const SYN = {
+  low:["not enough","offer"], cheap:["not enough","offer"], more:["more","higher"], higher:["higher","more"], money:["offer","not enough"], price:["price","offer"], offer:["offer"],
+  spot:["spot","online"], online:["online","website"], internet:["online"], website:["website","post"], post:["post"],
+  scales:["scales","weigh"], weigh:["weigh","scales"], weight:["weigh","scales"],
+  trust:["trust"], scam:["trust","rip off"], rip:["rip off","trust"], legit:["proper business"], real:["real","fake"], fake:["fake","not gold"], plated:["plated"],
+  mum:["sentimental","inherited"], dad:["sentimental","inherited"], nan:["sentimental"], inherited:["inherited","sentimental"], sentimental:["sentimental"],
+  wife:["husband wife","partner"], husband:["husband wife","partner"], family:["family"], kids:["kids","grandchildren"],
+  wait:["wait","later"], later:["later","not today"], think:["think"],
+  cash:["cash","payment"], paid:["payment"], id:["id"], passport:["id"],
+  broken:["broken"], stones:["stones"], diamond:["stones"], coin:["coins"], coins:["coins"], silver:["silver"], antique:["antique","designer"], designer:["designer"],
+  paid:["paid","original price"], bought:["paid","original price"], receipt:["paid"], jeweller:["jeweller","valuation"], valuation:["valuation"]
+};
+const STOP = new Set("i im it its is the a an to of and or for my me you your we our this that it's i'm don't dont do does can will would just so very too be in on at with but not ill ive id youre theyre thats got get".split(" "));
+
+function norm(s){return s.toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();}
+function stem(w){return w.replace(/(ing|ed|es|s)$/,"");}
+D.forEach(d=>{ d.hO=norm(d.o+" "+d.k); d.hA=norm(d.s+" "+d.n+" "+d.c); });
+
+function score(d, terms, phrase){
+  let sc=0, hit=0;
+  if(phrase.length>3 && norm(d.o).includes(phrase)) sc+=20;
+  for(const t of terms){
+    const alts=[t,...(SYN[t]||[])]; let best=0;
+    for(const a of alts){
+      const st=stem(a);
+      if(st.length<2) continue;
+      if(d.hO.includes(st)) best=Math.max(best, a===t?6:4);
+      else if(d.hA.includes(st)) best=Math.max(best, a===t?2:1);
+    }
+    if(best){sc+=best;hit++;}
+  }
+  if(terms.length>1) sc += hit===terms.length ? 5 : 0;
+  return hit? sc : 0;
+}
+
+const cats=["All",...new Set(D.map(d=>d.c))];
+let cat="All";
+const $=id=>document.getElementById(id);
+$("chips").innerHTML=cats.map(c=>`<button class="chip${c==="All"?" on":""}" data-c="${c}">${c}</button>`).join("");
+$("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));render();});
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function hl(text, terms){
+  let h=esc(text);
+  const ws=terms.map(stem).filter(w=>w.length>2);
+  if(!ws.length) return h;
+  const re=new RegExp("\\b("+ws.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")[a-z]*","gi");
+  return h.replace(re,"<mark>$&</mark>");
+}
+
+function render(){
+  const raw=$("q").value; const phrase=norm(raw);
+  $("clear").style.display=raw?"block":"none";
+  const terms=phrase.split(" ").filter(w=>w && !STOP.has(w));
+  let rows=D.filter(d=>cat==="All"||d.c===cat);
+  if(terms.length){
+    rows=rows.map(d=>({d,s:score(d,terms,phrase)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||a.d.i-b.d.i).map(x=>x.d);
+  }
+  $("method").style.display=terms.length?"none":"block";
+  $("count").textContent = terms.length ? `${rows.length} match${rows.length===1?"":"es"}` : `${rows.length} objections`;
+  if(!rows.length){$("list").innerHTML=`<div class="empty">Nothing matched. Try one simple word, like "price", "online", "mum" or "scales".<br><br>Still stuck? Stay calm, show the weights, and "Let me check with Adam."</div>`;return;}
+  $("list").innerHTML=rows.map(d=>`<div class="card"><div class="cat">${esc(d.c)}</div><div class="obj">“${hl(d.o,terms)}”</div><div class="say"><span class="lbl">Say</span>${hl(d.s,terms)}</div><div class="note"><span class="lbl">Know this</span>${hl(d.n,terms)}</div></div>`).join("");
+}
+let t; $("q").addEventListener("input",()=>{clearTimeout(t);t=setTimeout(render,80);});
+$("clear").addEventListener("click",()=>{$("q").value="";render();$("q").focus();});
+render();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
