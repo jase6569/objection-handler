@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d2a3f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Objections">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>Objection Finder · Dorset Jewellers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ee; --card:#ffffff; --ink:#1f2430; --muted:#6b6f7a; --line:#e6e0d4;
+    --gold:#a8843c; --gold-soft:#f3ead6; --navy:#1d2a3f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+  header{background:var(--navy);color:#fff;padding:18px 16px 14px}
+  header h1{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:26px;margin:0;letter-spacing:.3px}
+  header p{margin:2px 0 0;color:#c9cfdb;font-size:13px}
+  .searchwrap{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
+  .search{display:flex;align-items:center;background:#fff;border:1.5px solid var(--gold);border-radius:14px;padding:0 8px 0 14px}
+  .search svg{flex:none;opacity:.6}
+  .search input{flex:1;border:0;outline:0;font-size:18px;padding:13px 10px;background:transparent;font-family:inherit;color:var(--ink);min-width:0}
+  .clear{border:0;background:var(--gold-soft);color:var(--navy);border-radius:10px;padding:7px 11px;font-size:14px;font-family:inherit;cursor:pointer;display:none}
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink);cursor:pointer;font-family:inherit;white-space:nowrap}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  main{padding:10px 16px 60px;max-width:760px;margin:0 auto}
+  .count{color:var(--muted);font-size:13px;margin:4px 2px 10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:10px}
+  .cat{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .obj{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600;line-height:1.2;margin:3px 0 8px;color:var(--navy)}
+  .say{background:var(--gold-soft);border-left:3px solid var(--gold);border-radius:8px;padding:9px 11px;margin:0 0 8px}
+  .lbl{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
+  .note{font-size:14px;color:#3d4250}
+  mark{background:#f6dc8f;color:inherit;border-radius:3px;padding:0 1px}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px}
+  .rules{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;margin-top:18px;font-size:14px}
+  .rules h2{font-family:"Cormorant Garamond",serif;font-size:20px;margin:0 0 6px;color:var(--navy)}
+  .rules p{margin:4px 0}
+  .method{font-size:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 15px;margin-bottom:12px}
+  .method b{color:var(--navy)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Objection Finder</h1>
+  <p>Dorset Jewellers · type what the customer said</p>
+</header>
+<div class="searchwrap">
+  <div class="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d2a3f" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="e.g. too big, cheaper online, think about it" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search">
+    <button class="clear" id="clear">Clear</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+<main>
+  <div class="method" id="method"><b>Every time:</b> agree first, ask what's behind it, answer the real worry, then a soft next step.</div>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  <div class="rules">
+    <h2>Never say</h2>
+    <p>No pressure or made-up sales and deadlines. No on-site or while-you-wait repairs. Home visits are for buying only. Never mention second-hand or preloved. Never promise resale value or quote gold prices in posts. Never knock other jewellers or any diamond type. Only real Google reviews. If unsure: "Let me check with Adam."</p>
+  </div>
+</main>
+<script>
+const D = [
+// Fit and size
+["Fit and size","It doesn't fit.","No problem, let's measure you properly and we'll have it sized for you.","Most rings go up or down about two sizes. Check first: full eternity rings, tension settings, tungsten and titanium can't usually be resized.","too big too small tight loose wrong size doesnt fit resize ring size"],
+["Fit and size","I don't know their size.","Can you borrow a ring they wear on that finger? If not, we'll size it after they've got it.","Ask which finger and hand. Fingers swell in heat and late in the day, so size mid-range.","ring size unknown not sure size gift surprise"],
+["Fit and size","It's tight over the knuckle but loose at the base.","That's really common. A sizing bar or beads stop it spinning, and it still slides on.","Size to get over the knuckle, then add sizing beads or a spring insert.","knuckle arthritis big knuckles loose tight"],
+["Fit and size","It spins round on my finger.","A small fix sorts that. It's quick and it doesn't change the look.","Heavy-headed rings spin. A flatter or squared inner profile helps too.","spinning turns twists rotates moves loose"],
+["Fit and size","The bracelet or chain is too long or short.","We can have it shortened, or add an extension so it sits just right.","Measure the wrist and add about 1.5cm for comfort. For necklaces, ask where they want it to sit.","bracelet chain necklace length long short wrist"],
+["Fit and size","It feels too heavy or chunky.","Let me show you a lighter version of the same style.","Comfort fit (court shape) feels lighter than a flat band of the same width.","heavy chunky thick bulky big uncomfortable"],
+["Fit and size","Resizing will damage it.","Done properly, it won't. It's sent to a skilled goldsmith and it comes back looking the same.","White gold needs re-rhodium plating after sizing. Mention this up front.","resize damage ruin worried sizing harm"],
+// Price
+["Price and value","It's too expensive.","Fair enough. What were you comparing it to? Then explain where the value comes from.","Value is carat of gold, weight, stone quality, craftsmanship and the UK hallmark. Price means nothing without those.","expensive dear pricey cost too much money afford overpriced"],
+["Price and value","I've only got a set budget.","Perfect, tell me the figure and I'll show you the best within it.","Ask early. Show one piece slightly over (10 to 15%) only if you can explain why.","budget limit spend money afford"],
+["Price and value","Can you do a better price?","Let me see what I can add for you. Offer free sizing, a clean and check, or a gift box first.","Protect the price. If you discount, keep it small, give a reason, and check with Adam.","discount deal haggle cheaper knock off best price negotiate"],
+["Price and value","It's cheaper online.","It might be. Online, can you see the stone in daylight, try it on, or bring it back to someone local?","Online photos are edited. Many cheap listings are plated or thin hollow gold.","online internet amazon ebay website cheaper"],
+["Price and value","It's cheaper at the big chain.","Let's compare like for like: carat, weight and stone grade.","Chains often sell lighter weight pieces. Weigh ours and explain grams.","chain store high street competitor cheaper elsewhere"],
+["Price and value","I can't justify it right now.","Totally understand. Would it help to reserve it while you think?","Mention any payment options only if the shop actually offers them.","justify afford money tight not now finance"],
+["Price and value","Why is 18ct so much more than 9ct?","18ct is 75% pure gold, 9ct is 37.5%. You're paying for twice the gold.","9ct hallmark 375, 14ct 585, 18ct 750, 22ct 916.","18ct 9ct carat karat purity difference"],
+["Price and value","Is it a good investment?","Jewellery is something to enjoy and wear. Fine gold and good stones do hold value well.","Never promise resale value or quote gold prices in general marketing.","investment value resale worth hold value"],
+// Timing
+["Timing and hesitation","I need to think about it.","Of course. Just so I can help, is it the price, the style, or whether it's right for them?","Whatever they name is the real objection. Go to that section.","think about it unsure not sure maybe hesitant decide"],
+["Timing and hesitation","I'll come back later.","Lovely. Shall I put it aside for you for 48 hours? It's no obligation.","A reserved piece sells far more often. Take a name and number.","come back later return another day reserve"],
+["Timing and hesitation","I'm just looking.","Take your time. Is it for you or a gift? Then step back.","One easy question, then give space. Hovering kills it.","just looking browsing having a look"],
+["Timing and hesitation","I want to look around first.","Good idea. When you compare, check the carat, the weight and the hallmark. Here's my card.","Arm them with the right questions. It shows confidence and brings them back.","look around shop around compare other shops"],
+["Timing and hesitation","It's not the right time.","When's the occasion? Let's make sure you're not rushing near the date.","Remind them sizing and engraving take time before big dates.","not the right time later occasion date"],
+["Timing and hesitation","I'll wait for the sales.","If you love it, I'd hate for it to go before then. Shall I reserve it?","Never invent a sale or a fake deadline.","sale sales wait black friday january discount"],
+["Timing and hesitation","I came in for something else.","No problem, let's find that first.","Serve the original need. Mention the other piece once at the end.","something else different reason"],
+// Gifts
+["Gifts and other people","I don't know if they'll like it.","Tell me about them. Do they wear gold or silver? Delicate or bold?","Look at what they already wear. Earrings and pendants are the safest gifts.","gift present like it wife girlfriend husband mum"],
+["Gifts and other people","What if they don't like it?","Explain the shop's exchange policy clearly.","Check the current policy with Adam. Never promise refunds we don't offer.","exchange return refund don't like swap"],
+["Gifts and other people","I need to ask my partner.","Of course. Shall I take a photo for you, or reserve it so you can both come in?","Get their number so you can follow up.","partner wife husband ask check with"],
+["Gifts and other people","My wife or husband chooses their own jewellery.","Then a voucher might be perfect, or bring them in and make a morning of it.","Vouchers keep the sale if the shop sells them.","chooses own picky fussy voucher"],
+["Gifts and other people","They've got everything.","Something personal works best: a birthstone, an engraving, or a piece that marks a date.","Learn the birthstones by month. It's an easy win.","got everything nothing to buy ideas"],
+["Gifts and other people","It's for a child or teenager.","A small gold stud or a simple pendant they can grow with is lovely.","Suggest 9ct for durability. Check ears are pierced.","child kid teenager daughter son christening"],
+["Gifts and other people","My budget's small for a gift.","There's still lovely choice. Silver or a fine gold chain looks premium.","Always treat a small spend with the same care as a big one.","small budget cheap gift little money"],
+// Engagement
+["Engagement and wedding","I'm terrified of getting it wrong.","Nearly everyone feels that. Most rings get resized after the proposal, so the size doesn't need to be perfect.","Focus on style: solitaire, halo, trilogy. Style matters more than size.","engagement proposal propose nervous scared wrong"],
+["Engagement and wedding","I don't know what style she likes.","Let's look at what she wears now, or her saved photos. Does she go for classic or something different?","Ask friends or family. Pinterest boards are gold dust.","style engagement taste likes"],
+["Engagement and wedding","Should I propose with a temporary ring?","Some people do. You can choose the real one together afterwards.","Still a sale later. Keep their details.","temporary proposal placeholder"],
+["Engagement and wedding","Will the wedding band sit next to it?","Let's try them together now and check.","Some settings need a shaped or wishbone band to sit flush.","wedding band sit flush gap together"],
+["Engagement and wedding","Do we need matching wedding bands?","Not at all. They can match in metal and differ in width and style.","Men usually 5 to 6mm, women 2 to 4mm. Match metal to the engagement ring.","matching wedding bands his hers"],
+["Engagement and wedding","The stone looks small.","A halo or the right setting makes it look bigger, and cut matters more than carat for sparkle.","A well-cut diamond looks bigger than a poorly cut heavier one.","small stone tiny bigger diamond size"],
+["Engagement and wedding","Is it the 'three months' salary' thing?","That's just old advertising. Spend what feels right for you.","Builds trust. Never shame a budget.","salary months wages how much spend"],
+["Engagement and wedding","We'd rather spend on the wedding or a house.","Sensible. Let's find something beautiful that fits.","Respect it. Lab-grown or smaller stones can help.","wedding house mortgage save money"],
+// Trust
+["Quality and trust","How do I know it's real?","Let me show you the hallmark. It's a legal guarantee from a UK assay office.","Hallmark parts: sponsor's mark, fineness number, assay office mark, and an optional date letter.","real fake genuine authentic hallmark"],
+["Quality and trust","You're a new shop, I don't know you.","We're new here but Adam has 28 years in the trade, is an NAJ member and a qualified gemmologist.","Point to real Google reviews only. Never make up testimonials.","new shop trust don't know you reputation reviews"],
+["Quality and trust","Is the diamond certified?","Let me show you the certificate and what each grade means.","Know the labs: GIA is the gold standard. Follow Adam's rules on certificates.","certificate certified cert gia igi paperwork"],
+["Quality and trust","Will the stone fall out?","The claws are checked before it leaves us, and we're happy to look them over whenever you pop in.","Advise a claw check every 6 to 12 months. Four claws are lighter, six are more secure.","stone fall out lose claws prongs secure"],
+["Quality and trust","Is it solid gold or plated?","Solid gold, and the hallmark proves it.","Gold-plated and rolled gold pieces aren't hallmarked as gold.","solid plated rolled gold filled"],
+["Quality and trust","Is it insured?","We're fully insured while it's with us. For home, add it to your contents insurance, and we can do a valuation.","Insurers often want a valuation for single items over a set limit.","insured insurance cover lost stolen"],
+["Quality and trust","I had a bad experience at another jeweller.","I'm sorry to hear that. Tell me what happened so we make sure it's different here.","Listen fully. Never criticise the other shop.","bad experience ripped off other jeweller complaint"],
+// Metals
+["Metals and wear","Will 9ct last?","Yes, 9ct is actually harder wearing than 18ct. 18ct is richer in colour but softer.","More alloy means a harder metal. 9ct suits everyday rings for active people.","9ct last durable cheap gold quality wear"],
+["Metals and wear","White gold goes yellow.","It's rhodium plated for that bright white. A quick replate every year or two keeps it perfect.","No upkeep wanted? Show platinum, which stays white naturally.","white gold yellow rhodium plating fade"],
+["Metals and wear","Platinum's too expensive.","It costs more up front, but it's dense, naturally white and never needs plating.","Platinum is hallmarked 950. It scratches but the metal moves rather than wears away.","platinum expensive"],
+["Metals and wear","I'm allergic to some metals.","It's usually nickel. Platinum, higher carat gold or nickel-free white gold are all good choices.","Never diagnose. Just guide them to the safer metals.","allergic allergy rash itchy nickel green finger sensitive skin"],
+["Metals and wear","Silver tarnishes.","Wearing it actually helps. A polishing cloth brings it straight back.","Sterling is 92.5% silver, hallmarked 925. Store it in an airtight bag.","silver tarnish black dull"],
+["Metals and wear","Rose gold will fade.","Rose gold's colour runs right through the metal, so it won't wear off.","The colour comes from copper in the alloy, not plating.","rose gold fade pink colour"],
+["Metals and wear","I work with my hands.","Let's look at lower profile settings and a harder metal, like 9ct or platinum.","Bezel or rub-over settings protect stones best.","work hands builder nurse gym manual job"],
+["Metals and wear","Will it scratch?","All precious metals pick up marks over time. A polish brings it back.","Being honest here prevents complaints later.","scratch marks scuff damage"],
+// Diamonds
+["Diamonds and gems","Why not just buy lab-grown?","Lab-grown are real diamonds and great value. Natural ones are rarer. It depends what matters to you.","Lab-grown hold very little resale value. Don't knock either option.","lab grown lab created synthetic man made"],
+["Diamonds and gems","Is lab-grown fake?","No, it's chemically the same diamond, just grown rather than mined.","Only special lab equipment can tell them apart. Moissanite and CZ are different stones.","lab grown fake real moissanite cz cubic zirconia"],
+["Diamonds and gems","Natural diamonds hold their value, right?","Better than lab-grown, but jewellery isn't really an investment.","Adam's view: lab-grown has pushed natural values down. Never promise resale.","natural diamond value resale investment"],
+["Diamonds and gems","It's got an inclusion, I can see it.","Every natural diamond has its own fingerprint. Let's look at it at arm's length, how people will see it.","Eye-clean is what matters. SI1 is often eye-clean. Use the loupe together.","inclusion flaw mark spot black dot clarity cloudy"],
+["Diamonds and gems","Why does this certificate matter?","It's an independent grade, so you know exactly what you're getting.","GIA carries real weight. IGI is recognised but not as strong. A retailer's own certificate gives no indication of value.","certificate gia igi grading report"],
+["Diamonds and gems","Cheaper diamonds online look the same.","On paper maybe. Cut and how it sparkles in real light are what you can only judge in person.","Two stones with the same grades can look very different. Cut is king.","online diamond cheaper same grade"],
+["Diamonds and gems","Coloured stones break easily.","Some are softer, so we'll match the stone to how you'll wear it.","Mohs hardness: diamond 10, sapphire and ruby 9, emerald 7.5 to 8 and brittle, opal 5.5 to 6.5.","break chip crack fragile emerald opal soft gemstone"],
+["Diamonds and gems","Is this a real sapphire?","Yes, and I'll explain whether it's been heat treated, which is normal for most sapphires.","Heat treatment is standard and accepted. Always disclose treatments.","sapphire real treated heated ruby gemstone"],
+["Diamonds and gems","I want a diamond but it's over budget.","Let's look at a white sapphire, a smaller stone in a halo, or lab-grown.","Give a choice, not a downgrade.","diamond over budget alternative cheaper"],
+// Style
+["Style and choice","It's not quite what I want.","What's not right, the colour, size or shape? Then show two alternatives.","Two options, not ten.","not what i want not right different"],
+["Style and choice","Do you have it in rose gold or another size?","Let me check. If not, we can look at ordering it in for you.","Check with Adam before promising lead times.","other colour rose gold yellow white different size order in stock"],
+["Style and choice","I can't decide between these two.","Wear one on each hand for a minute. Which one do you keep looking at?","People usually already know. Let them notice it.","decide two choose between torn"],
+["Style and choice","It looks different on me than in the window.","Let's try it in daylight by the door and with a mirror.","Shop lights flatter. Daylight builds trust.","looks different window lighting"],
+["Style and choice","It's too old-fashioned or too modern.","Good to know. That helps me find your style.","Use it as information, not rejection.","old fashioned dated modern trendy style"],
+["Style and choice","I want something unique.","Let's talk about engraving, or a stone or setting that's personal to you.","Ask Adam before offering any bespoke work.","unique different bespoke custom one off engraving"],
+["Style and choice","Will it go with my other jewellery?","Bring in what you wear, or show me a photo, and we'll match it.","Match metal colour first, then the style.","match go with other jewellery stack"],
+// Repairs
+["Repairs and valuations","It's not worth repairing.","Let's take a look. Sentimental pieces are often well worth saving.","Give an honest quote. If it isn't worth it, say so.","repair fix broken worth"],
+["Repairs and valuations","Repairs take too long.","We'll give you a clear timescale up front and keep you updated.","Repairs aren't done on site. Never promise while-you-wait.","repair long time slow how long"],
+["Repairs and valuations","Can you do it today?","I'll check and give you an honest timescale.","Under-promise, over-deliver.","today now quick same day while i wait"],
+["Repairs and valuations","Why do I need a valuation?","If it's lost or stolen, your insurer will want one to replace it properly.","Insurance valuations are replacement value, not what you'd get selling it.","valuation value insurance worth"],
+["Repairs and valuations","It's what I paid for it.","I understand. What was paid originally doesn't decide what it's worth today, though.","Adam's rule: original purchase price has nothing to do with today's value.","paid worth value original price"],
+["Repairs and valuations","My certificate says it's worth more.","Let's look at who issued it. Some carry more weight than others.","GIA counts most. A retailer's own certificate gives no indication of value.","certificate worth more value"],
+["Repairs and valuations","Can you check my rings while I'm here?","Of course, let's have a look at the claws.","A worn claw found early is a repair and often a new sale.","check rings claws clean"],
+// Selling gold
+["Selling gold to us","I'll get more elsewhere.","You're welcome to compare. We'll show you the weight and carat so you can see how we got to our figure.","Weigh and test in front of them. Openness beats pressure.","sell gold more elsewhere better offer"],
+["Selling gold to us","How do I know your scales are right?","They're calibrated trade scales. Watch the reading with me.","Use only approved, verified scales.","scales weight accurate"],
+["Selling gold to us","I saw a higher price online.","That's usually the raw gold price. Buyers pay a share of that, based on weight and purity.","Explain spot price versus scrap price simply. Never quote a price in general posts.","gold price online spot higher"],
+["Selling gold to us","It's sentimental, I'm not sure.","Take your time. There's no rush, and you can always come back.","Never push someone to sell a memory. They'll trust and return.","sentimental inherited mum nan memory unsure sell"],
+["Selling gold to us","I'd rather you came to me.","We can do a home visit to buy. Let's book a time that suits you.","Home visits are for buying only, never repairs.","home visit come to me house"],
+["Selling gold to us","Is it safe to bring it in?","Yes. We're fully insured, and it's all done privately and calmly.","Keep it premium and quiet, never pawn-shop.","safe bring in secure private"],
+["Selling gold to us","It's broken, is it worth anything?","Broken gold is still gold. It's the weight and carat that count.","Odd earrings, snapped chains and dental gold can all be bought.","broken scrap snapped odd earring worth"],
+// Watches
+["Watches","My phone tells the time.","It does. A watch is more about style and something you'll keep for years.","Sell the feeling and the gift, not timekeeping.","watch phone time"],
+["Watches","The strap doesn't fit.","Links can be removed or the strap swapped so it sits comfortably.","Arrange it. Never promise it's done on the spot.","watch strap links bracelet fit"],
+["Watches","Automatic watches stop.","They wind as you wear them. A winder or a quick wind keeps it going.","Automatics usually run around 40 hours off the wrist.","automatic watch stops winding"],
+["Watches","Is it waterproof?","It's water resistant to a rating. Let me explain what that means day to day.","30m means splashes only. 100m or more for swimming.","waterproof water swim shower"]
+].map(([c,o,s,n,k],i)=>({i,c,o,s,n,k}));
+
+// words that mean the same thing to a customer
+const SYN = {
+  big:["fit","size","loose"], small:["fit","size","tight"], loose:["fit","size","spins"], tight:["fit","size","knuckle"],
+  size:["fit","size"], fit:["fit","size"], fits:["fit","size"], resize:["resize","size"],
+  dear:["expensive"], pricey:["expensive"], cost:["expensive","price"], costly:["expensive"], money:["budget","expensive","afford"], afford:["afford","budget"], price:["price","expensive","discount"],
+  cheaper:["cheaper","online","discount"], cheap:["cheaper","budget"], discount:["discount","price"], deal:["discount"],
+  think:["think"], later:["later","come back"], back:["come back"], browsing:["looking"], looking:["looking"],
+  wife:["partner","gift"], husband:["partner","gift"], girlfriend:["partner","gift","engagement"], boyfriend:["partner","gift"], partner:["partner"],
+  propose:["engagement","proposal"], proposal:["engagement","proposal"], engagement:["engagement"], wedding:["wedding"],
+  real:["real","genuine","fake"], fake:["fake","real"], genuine:["real"],
+  allergy:["allergic"], allergic:["allergic"], rash:["allergic"], itch:["allergic"], green:["allergic"],
+  lab:["lab"], synthetic:["lab"], diamond:["diamond"], flaw:["inclusion"],
+  repair:["repair"], fix:["repair"], broken:["broken","repair"], value:["value","valuation","worth"], worth:["worth","value"],
+  sell:["sell","gold"], selling:["sell","gold"], scrap:["broken","gold"], visit:["home visit"],
+  watch:["watch"], gift:["gift"], present:["gift"]
+};
+const STOP = new Set("i im it its is the a an to of and or for my me you your we our this that it's i'm don't dont do does can will would just so very too be in on at with but not ill ive id youre theyre thats got get".split(" "));
+
+function norm(s){return s.toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();}
+function stem(w){return w.replace(/(ing|ed|es|s)$/,"");}
+D.forEach(d=>{ d.hO=norm(d.o+" "+d.k); d.hA=norm(d.s+" "+d.n+" "+d.c); });
+
+function score(d, terms, phrase){
+  let sc=0, hit=0;
+  if(phrase.length>3 && norm(d.o).includes(phrase)) sc+=20;
+  for(const t of terms){
+    const alts=[t,...(SYN[t]||[])]; let best=0;
+    for(const a of alts){
+      const st=stem(a);
+      if(st.length<2) continue;
+      if(d.hO.includes(st)) best=Math.max(best, a===t?6:4);
+      else if(d.hA.includes(st)) best=Math.max(best, a===t?2:1);
+    }
+    if(best){sc+=best;hit++;}
+  }
+  if(terms.length>1) sc += hit===terms.length ? 5 : 0;
+  return hit? sc : 0;
+}
+
+const cats=["All",...new Set(D.map(d=>d.c))];
+let cat="All";
+const $=id=>document.getElementById(id);
+$("chips").innerHTML=cats.map(c=>`<button class="chip${c==="All"?" on":""}" data-c="${c}">${c}</button>`).join("");
+$("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));render();});
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function hl(text, terms){
+  let h=esc(text);
+  const ws=terms.map(stem).filter(w=>w.length>2);
+  if(!ws.length) return h;
+  const re=new RegExp("\\b("+ws.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")[a-z]*","gi");
+  return h.replace(re,"<mark>$&</mark>");
+}
+
+function render(){
+  const raw=$("q").value; const phrase=norm(raw);
+  $("clear").style.display=raw?"block":"none";
+  const terms=phrase.split(" ").filter(w=>w && !STOP.has(w));
+  let rows=D.filter(d=>cat==="All"||d.c===cat);
+  if(terms.length){
+    rows=rows.map(d=>({d,s:score(d,terms,phrase)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||a.d.i-b.d.i).map(x=>x.d);
+  }
+  $("method").style.display=terms.length?"none":"block";
+  $("count").textContent = terms.length ? `${rows.length} match${rows.length===1?"":"es"}` : `${rows.length} objections`;
+  if(!rows.length){$("list").innerHTML=`<div class="empty">Nothing matched. Try one simple word, like "price", "size", "gift" or "real".<br><br>Still stuck? Agree, ask what's behind it, and "Let me check with Adam."</div>`;return;}
+  $("list").innerHTML=rows.map(d=>`<div class="card"><div class="cat">${esc(d.c)}</div><div class="obj">“${hl(d.o,terms)}”</div><div class="say"><span class="lbl">Say</span>${hl(d.s,terms)}</div><div class="note"><span class="lbl">Know this</span>${hl(d.n,terms)}</div></div>`).join("");
+}
+let t; $("q").addEventListener("input",()=>{clearTimeout(t);t=setTimeout(render,80);});
+$("clear").addEventListener("click",()=>{$("q").value="";render();$("q").focus();});
+render();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
